@@ -1,0 +1,35 @@
+{
+  "name": "pageflip",
+  "version": "1.0.0",
+  "description": "page flip effect",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --open --config build/webpack.dev.js",
+    "build": "webpack --config build/webpack.prod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hzjjg/pageflip.git"
+  },
+  "keywords": [
+    "pageflip"
+  ],
+  "author": "hzjio@outlook.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hzjjg/pageflip/issues"
+  },
+  "homepage": "https://github.com/hzjjg/pageflip#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.19",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "sass-loader": "^7.1.0",
+    "ts-loader": "^4.5.0",
+    "typescript": "^3.0.1",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5",
+    "webpack-merge": "^4.1.4"
+  }
+}
