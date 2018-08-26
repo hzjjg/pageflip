@@ -533,7 +533,7 @@ export default class PageFlip {
             })
         });
 
-        //设置画布大小 书本大小 + CANVAS_PADDING
+        //设置画布大小 书本大小 + canvasPadding
         this.canvas.width = this.bookWidth + (this.canvasPaddingHorizontal * 2);
         this.canvas.height = this.bookHeight + (this.canvasPaddingVeritical * 2);
 
@@ -541,7 +541,7 @@ export default class PageFlip {
         this.canvas.style.top = `${-this.canvasPaddingVeritical}px`;
         this.canvas.style.left = `${-this.canvasPaddingHorizontal}px`;
 
-        //按照fps为 RENDER_FPS 渲染页面
+        //每帧渲染一次
         this.runRender()
 
         //绑定事件
