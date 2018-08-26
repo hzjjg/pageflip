@@ -17,7 +17,14 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: 'ts-loader',
+                use: [
+                    {
+                        loader: 'babel-loader'
+                    },
+                    {
+                        loader: 'ts-loader'
+                    }
+                ],
                 exclude: /node_modules/
             },
             {
@@ -28,11 +35,11 @@ module.exports = {
     },
 
     resolve: {
-        extensions: [".ts", ".js", ".scss",'json']
+        extensions: [".ts", ".js", ".scss", 'json']
     },
 
     plugins: [
-        new CleanWebpackPlugin([path.resolve(__dirname,'../dist')]),
+        new CleanWebpackPlugin([path.resolve(__dirname, '../dist')]),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'demo/index.html'
