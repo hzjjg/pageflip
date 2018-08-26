@@ -4,7 +4,7 @@ import { DisplayType, DirectionType } from "./enum";
 /**
  * @class 翻页效果
  */
-export class PageFlip {
+export default class PageFlip {
 
     /** 书本宽度 px */
     private bookWidth: number;
@@ -22,19 +22,19 @@ export class PageFlip {
     private pageY: number = 0;
 
     /** 待废弃属性 */
-    private canvasPaddingHorizontal: number;
+    private canvasPaddingHorizontal: number = 10;
 
-     /** 待废弃属性 */
-    private canvasPaddingVeritical: number;
+    /** 待废弃属性 */
+    private canvasPaddingVeritical: number = 20;
 
     /** 翻页释放时的速度 0 - 1 */
-    private flipSpeed: number;
-    
+    private flipSpeed: number = 0.34;
+
     /** 到达需要翻页时候的速度 px/ms */
-    private flipMoveSpeed: number;
+    private flipMoveSpeed: number = 0.5;
 
     /** 翻页力度，音响翻页的高度 */
-    private flipStrength: number;
+    private flipStrength: number = 10;
 
     /** 画布的DOM */
     private canvas: HTMLCanvasElement;
@@ -46,7 +46,7 @@ export class PageFlip {
     private _pages: HTMLElement[] = [];
 
     /** 单双页 */
-    private display: DisplayType
+    private display: DisplayType = DisplayType.SINGLE
 
     /** 好的 */
     private _pageIndex = 0;
@@ -76,7 +76,7 @@ export class PageFlip {
     private enable = true;
 
     /** 翻页页面页码变化的回调 */
-    private onFlipComplete: () => {};
+    private onFlipComplete: (page: number, oldPage: number) => {};
 
     constructor(config: FlipConfig) {
         //配置设置的属性
@@ -128,7 +128,7 @@ export class PageFlip {
     /**
      * 是否正在拖动
      */
-    public get isDraging(): boolean {
+    public get isDragging(): boolean {
         return this.touchDragging;
     }
 
@@ -144,7 +144,7 @@ export class PageFlip {
             }
 
             //按照速度将 progress 增加至 target
-            flip.progress += (flip.target = flip.progress) * Math.max(Math.min(this.flipSpeed, 1), 0);
+            flip.progress += (flip.target - flip.progress) * Math.max(Math.min(this.flipSpeed, 1), 0);
 
             //拖动页面中 或者 progress没完成 则渲染
             if (flip.dragging || Math.abs(flip.progress) < 0.997) {
@@ -188,7 +188,8 @@ export class PageFlip {
      * @param event 鼠标/触摸事件
      */
     private drapMove(event: TouchEvent) {
-        let x, y;
+        let x
+        let y;
         if (event.touches) {
             let touch = event.touches[0];
             x = touch.clientX;
@@ -403,7 +404,7 @@ export class PageFlip {
      * @param {number} page 页面从 1 开始
      * @param {boolean} isAniamte 是否翻页动画
      */
-    public turnToPage(page: number, isAnimate: boolean) {
+    public turnToPage(page: number, isAnimate?: boolean) {
         if (!this.pages[page - 1] || this.pageIndex === page - 1) {
             return;
         }
@@ -432,7 +433,7 @@ export class PageFlip {
             }
         }
 
-        this.pageIndex = page - 1;
+        this._pageIndex = page - 1;
 
     }
 
@@ -453,8 +454,8 @@ export class PageFlip {
     /**
      * 页面dom变化时候，用来重置页面
      */
-    public resetPage(pages: HTMLElement[]) {
-        this.pageIndex = 0;
+    public resetPages(pages: HTMLElement[]) {
+        this._pageIndex = 0;
         this.pages = Array.from(pages);
         this.flips = [];
         this.pages.forEach((page, index) => {
@@ -541,9 +542,7 @@ export class PageFlip {
         this.canvas.style.left = `${-this.canvasPaddingHorizontal}px`;
 
         //按照fps为 RENDER_FPS 渲染页面
-        requestAnimationFrame(() => {
-            this.runRender()
-        })
+        this.runRender()
 
         //绑定事件
         this.bindEvent();

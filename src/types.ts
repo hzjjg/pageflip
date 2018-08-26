@@ -17,7 +17,7 @@ export interface FlipConfig {
     pageHeight?: number;
 
     /** 待废弃 */
-    pageY: number;
+    pageY?: number;
 
     /** 待废弃属性 */
     canvasPaddingHorizontal?: number;
@@ -38,13 +38,17 @@ export interface FlipConfig {
     canvas: HTMLCanvasElement;
 
     /** 书本的dom */
-    book: HTMLElement;
+    book?: HTMLElement;
 
     /** 页面的dom */
-    pages?: HTMLCollection;
+    pages?: HTMLElement[];
 
     /** 单双页 */
-    display: DisplayType
+    display?: DisplayType;
+
+    /** 翻页页面页码变化的回调 */
+    onFlipComplete?: (page:number,oldPage:number) => any;
+
 }
 
 /** 

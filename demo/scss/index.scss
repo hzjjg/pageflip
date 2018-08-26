@@ -1,0 +1,337 @@
+@import "./base/variables";
+@import "./base/reset";
+@import "./base/common";
+
+$color-bg:#fafafa;
+$color-border:#192031;
+$theme-red:#D34747;
+$theme-green:#0FB997;
+$color-white:#fff;
+$color-theme:$theme-green;
+
+$border-style:.5px solid rgba($color: $color-border, $alpha: .3);
+
+body{
+    background-color: $color-bg;
+    overflow: scroll;
+    padding: 0;
+    font-size: 12PX;
+}
+.almanac{
+    &_content{
+        position: absolute;
+        top: 30px;
+        left: 25px;
+        height: 1180px;
+        width: 700px;
+        box-shadow: 0 12px 30px -20px rgba($color: #000000, $alpha: .1);
+        // overflow-x: hidden;
+    }
+    &_canvas{
+        position: absolute;
+        z-index: 99;
+    }
+    &_list{
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        overflow: hidden;
+    }
+    &_item{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $color-white;
+        border-radius: 14px;
+        overflow: hidden;
+        will-change: transform;
+    }
+}
+
+//16:9屏幕
+.almanac.h16w9{
+    .almanac_content{
+        height: 1105px;
+    }
+    .almanacPaper{
+        &_date{
+            line-height: 1.2;
+        }
+    }
+}
+
+.almanacPaper{
+    width: 700px;
+    padding:  26px 20px;
+    color: $color-theme;
+    will-change: transform;
+
+    &::-webkit-scrollbar{
+        width: 0
+    }
+    &_date{
+        font-size: 250px;
+        text-align: center;
+        font-weight: bolder;
+        padding-bottom: 30px;
+    }
+
+    &_body{
+        display: flex;
+        border-top: $border-style;
+        border-bottom: $border-style;
+        // min-height: 400px;
+        height: 500px;
+        overflow: hidden;
+    }
+
+    &_footer{
+        display: flex;
+
+    }
+
+    &_content{
+        display: flex;
+        flex-direction: column;
+        flex: 2.8;
+        // width: 360px;
+        padding-top: 1px;
+        border-left: $border-style;
+        border-right: $border-style;
+    }
+
+    &_solarTerms{
+        height: 150px;
+        border-bottom: $border-style;
+        background: center no-repeat;
+        background-size: 100% 100%;
+        margin-top: 1px;
+        margin-right:2px;
+    }
+
+    &_gods{
+        // height: 100%;
+        flex: auto;
+        border-top: $border-style;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .date{
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        &_month{
+            display: flex;
+            line-height: 80px;
+            height: 80px;
+            width: 80px;
+            justify-content: center;
+            align-items: center;
+            background-color: $color-theme;
+            color: $color-white;
+            border-radius: 50%;
+            font-size: 30px;
+            word-break: keep-all;
+        }
+        &_lunar{
+            margin-left: 40px;
+        }
+        &_week{
+            margin-left: 40px;
+        }
+        &_constellation{
+            margin-left: 40px;
+        }
+    }
+    .suitable,
+    .avoid{
+        flex: 1;
+        padding-top: 16px;
+        width: 170px;
+        &_title{
+            margin: 0 auto;
+            font-size: 44px;
+            height: 80px;
+            width: 80px;
+            color: $color-white;
+            background: $color-theme;
+            text-align: center;
+            border-radius: 50%;
+            padding-top: 10px;
+        }
+        &_content{
+            margin-top: 10px;
+            padding-bottom: 10px;
+        }
+    }
+
+    .suitable{
+        &_title{
+            margin-left: 15px;
+        }
+
+        &_content{
+            margin-left: 0px;
+        }
+    }
+
+    .avoid{
+        &_title{
+            margin-left: 35px;
+        }
+        &_content{
+            margin-left: 20px;
+        }
+    }
+
+    .pengZu{
+        padding-top: 12px;
+        text-align: center;
+        &_content{
+            margin-top: 10px;
+            padding-bottom: 10px;
+        }
+        &_title{
+            padding: 6px 10px 0 10px;
+            text-align: center;
+            background-color: $color-theme;
+            color: $color-white;
+            font-size: 28px;
+            display: inline-block;
+        }
+    }
+
+    .godsItem{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        &_title{
+            background-color: $color-theme;
+            margin-left: -0.5px;
+            color: $color-white;
+            padding: 6px 0 0 0;
+            font-size: 28px;
+        }
+        &_content{
+            flex: auto;
+            padding: 10px 20px;
+            margin-left: -0.5px;
+        }
+    }
+
+    .godsItem-fetus{
+        flex: 4;
+    }
+    
+    .godsItem-elements{
+        flex: 5;
+        .godsItem_title{
+            border-left: .5px solid rgba($color:#fff , $alpha: .9);
+            border-right: .5px solid rgba($color: #fff, $alpha: .9);
+        }
+        .godsItem_content{
+            border-left: $border-style;
+            border-right: $border-style;
+        }
+    }
+
+    .godsItem-luckyGod{
+        flex: 6;
+    }
+
+    .fortune{
+        flex: 1;
+        padding-top: 8px;
+        margin-bottom: 20px;
+        &_title{
+            display: inline-block;
+            color: $color-white;
+            background-color: $color-theme;
+            padding: 6px 10px 0 10px;         
+            font-size: 28px;   
+        }
+        &_content{
+            padding: 10px 0 0 0;
+            width: 275px;
+            height: 80px;
+            overflow: hidden;
+        }
+    }
+}
+
+.almanacPaper-red{
+    color: $theme-red;
+    .date{
+        &_month{
+            background-color: $theme-red;
+        }
+    }
+    .suitable,
+    .avoid{
+        &_title{
+            background: $theme-red;
+        }
+    }
+    .pengZu{
+        &_title{
+            background: $theme-red; 
+        }
+    }
+    .godsItem{
+        &_title{
+            background-color: $theme-red;
+        }
+    }
+    .fortune{
+        &_title{
+            background-color: $theme-red;
+        }
+    }
+}
+
+.almanacPaper-green{
+    color: $theme-green;
+    .date{
+        &_month{
+            background-color: $theme-green;
+        }
+    }
+    .suitable,
+    .avoid{
+        &_title{
+            background: $theme-green;
+        }
+    }
+    .pengZu{
+        &_title{
+            background: $theme-green; 
+        }
+    }
+    .godsItem{
+        &_title{
+            background-color: $theme-green;
+        }
+    }
+    .fortune{
+        &_title{
+            background-color: $theme-green;
+        }
+    }
+}
+
+.almanacPaper-noData{
+    padding-top: 400px;
+    color: $theme-red;
+    text-align: center;
+    font-size: 40px;
+}
+
+.loader{
+    margin-top: 400px;
+    border-left: 10px solid $theme-green;
+}
