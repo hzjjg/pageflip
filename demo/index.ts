@@ -321,7 +321,6 @@ class App {
     initPageflip() {
         this.pageflip = new PageFlip(
             {
-                canvas: <HTMLCanvasElement>($('#pageflipCanvas')[0]),
                 book: $('.almanac_content')[0],
                 pages: Array.from($('.almanac_item')),
                 onFlipComplete: (page, oldPage) => {

@@ -34,9 +34,6 @@ export interface FlipConfig {
     /** 翻页力度，音响翻页的高度 */
     flipStrength?: number;
 
-    /** 画布的DOM */
-    canvas: HTMLCanvasElement;
-
     /** 书本的dom */
     book?: HTMLElement;
 

@@ -87,8 +87,6 @@ export default class PageFlip {
             }
         }
 
-        this.canvasContext = this.canvas.getContext('2d');
-
         this.init();
     }
 
@@ -532,6 +530,13 @@ export default class PageFlip {
                 dragging: false
             })
         });
+
+        //生成画布
+        this.canvas = document.createElement('canvas');
+        this.book.insertBefore(this.canvas,this.book.childNodes[0]);
+        this.canvas.style.position = 'absolute';
+        this.canvas.style.zIndex = '9999';
+        this.canvasContext = this.canvas.getContext('2d');
 
         //设置画布大小 书本大小 + canvasPadding
         this.canvas.width = this.bookWidth + (this.canvasPaddingHorizontal * 2);
