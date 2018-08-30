@@ -6,20 +6,11 @@ import { DisplayType, DirectionType } from "./enum";
  */
 export default class PageFlip {
 
-    /** 书本宽度 px */
-    private bookWidth: number;
-
-    /** 书本高度 px */
-    private bookHeight: number;
-
     /** 页面宽度 */
-    private pageWidth: number;
+    private pageWidth: number = 0;
 
     /** 页面高度 */
-    private pageHeight: number;
-
-    /** 待废弃 */
-    private pageY: number = 0;
+    private pageHeight: number = 0;
 
     /** 待废弃属性 */
     private canvasPaddingHorizontal: number = 10;
@@ -69,7 +60,7 @@ export default class PageFlip {
     /** 开始移动的时间 */
     private startTime = 0;
 
-    /** 是否正则拖动 */
+    /** 是否正在拖动 */
     private touchDragging = false;
 
     /** 是否启用翻页 */
@@ -294,7 +285,7 @@ export default class PageFlip {
         // 设置鼠标的位置 下方中点坐标为(0，0)
         // this._mouse.x = event.clientX - this._book.offsetLeft - (BOOK_WIDTH / 2);
         this.mousePos.x = x - this.book.offsetLeft;
-        this.mousePos.y = -y + this.book.offsetTop + this.bookHeight;
+        this.mousePos.y = -y + this.book.offsetTop + this.pageHeight;
     }
 
     /**
@@ -325,7 +316,7 @@ export default class PageFlip {
 
 
         this.canvasContext.save();
-        this.canvasContext.translate(this.canvasPaddingHorizontal + 0, this.pageY + this.canvasPaddingVeritical);
+        this.canvasContext.translate(this.canvasPaddingHorizontal + 0, this.canvasPaddingVeritical);
 
         // 画左边较短的阴影 根据页面高度变化
         this.canvasContext.strokeStyle = `rgba(0,0,0,${0.05 * strength})`;
@@ -473,16 +464,8 @@ export default class PageFlip {
      * 重设页面大小
      */
     public resetPageSize() {
-        this.bookWidth = this.book.offsetWidth;
-        this.bookHeight = this.book.offsetHeight;
-
-        this.pageWidth = this.bookWidth;
-        this.pageHeight = this.bookHeight;
-
-        this.pageY = (this.bookHeight - this.pageHeight) / 2;
-
-        this.canvas.width = this.bookWidth + (this.canvasPaddingHorizontal * 2);
-        this.canvas.height = this.bookHeight + (this.canvasPaddingVeritical * 2);
+        this.canvas.width = this.pageWidth + (this.canvasPaddingHorizontal * 2);
+        this.canvas.height = this.pageHeight + (this.canvasPaddingVeritical * 2);
 
         this.canvas.style.top = `${-this.canvasPaddingVeritical}px`;
         this.canvas.style.left = `${-this.canvasPaddingHorizontal}px`;
@@ -499,19 +482,37 @@ export default class PageFlip {
     }
 
     /**
-     * 初始化
+     * 绘制画布
      */
-    private init() {
-        //书本尺寸
-        this.bookWidth = this.book.offsetWidth;
-        this.bookHeight = this.book.offsetHeight;
+    private initCanvas() {
+        //生成画布
+        this.canvas = document.createElement('canvas');
+        this.book.insertBefore(this.canvas, this.book.childNodes[0]);
+        this.canvas.style.position = 'absolute';
+        this.canvas.style.zIndex = '9999';
+        this.canvasContext = this.canvas.getContext('2d');
+
+        //设置画布大小 页面大小 + canvasPadding
+        this.canvas.width = this.pageWidth + (this.canvasPaddingHorizontal * 2);
+        this.canvas.height = this.pageHeight + (this.canvasPaddingVeritical * 2);
+
+        //移动画布使书本在画布中间正确位置
+        this.canvas.style.top = `${-this.canvasPaddingVeritical}px`;
+        this.canvas.style.left = `${-this.canvasPaddingHorizontal}px`;
+    }
+
+    /**
+     * 初始化页面翻页对象
+     */
+    private initPages() {
 
         //页面尺寸
-        this.pageWidth = this.bookWidth;
-        this.pageHeight = this.bookHeight;
+        if (this.pages.length <= 0) {
+            return;
+        }
 
-        //书的顶部与纸张的间距
-        this.pageY = (this.bookHeight - this.pageHeight) / 2;
+        this.pageWidth = this.pages[0].offsetWidth;
+        this.pageHeight = this.pages[0].offsetHeight;
 
         //设置 filip 对象
         this.pages.forEach((page, index) => {
@@ -530,26 +531,19 @@ export default class PageFlip {
                 dragging: false
             })
         });
+    }
 
-        //生成画布
-        this.canvas = document.createElement('canvas');
-        this.book.insertBefore(this.canvas,this.book.childNodes[0]);
-        this.canvas.style.position = 'absolute';
-        this.canvas.style.zIndex = '9999';
-        this.canvasContext = this.canvas.getContext('2d');
+    /**
+     * 初始化
+     */
+    private init() {
 
-        //设置画布大小 书本大小 + canvasPadding
-        this.canvas.width = this.bookWidth + (this.canvasPaddingHorizontal * 2);
-        this.canvas.height = this.bookHeight + (this.canvasPaddingVeritical * 2);
+        this.initPages();
 
-        //移动画布使书本在画布中间正确位置
-        this.canvas.style.top = `${-this.canvasPaddingVeritical}px`;
-        this.canvas.style.left = `${-this.canvasPaddingHorizontal}px`;
+        this.initCanvas();
 
-        //每帧渲染一次
         this.runRender()
 
-        //绑定事件
         this.bindEvent();
     }
 

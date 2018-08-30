@@ -4,27 +4,6 @@ import { DisplayType } from "./enum";
  * 配置项
  */
 export interface FlipConfig {
-    /** 书本宽度 px */
-    bookWidth?: number;
-
-    /** 书本高度 px */
-    bookHeight?: number;
-
-    /** 页面宽度 */
-    pageWidth?: number;
-
-    /** 页面高度 */
-    pageHeight?: number;
-
-    /** 待废弃 */
-    pageY?: number;
-
-    /** 待废弃属性 */
-    canvasPaddingHorizontal?: number;
-
-    /** 待废弃属性 */
-    canvasPaddingVeritical?: number;
-
     /** 翻页释放时的速度 0 - 1 */
     flipSpeed?: number;
 
