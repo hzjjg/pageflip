@@ -1,5 +1,5 @@
 import { FlipConfig, Flip } from "./types";
-import { DisplayType, DirectionType } from "./enum";
+import { DirectionType } from "./enum";
 
 /**
  * @class 翻页效果
@@ -36,9 +36,6 @@ export default class PageFlip {
     /** 页面的dom */
     private _pages: HTMLElement[] = [];
 
-    /** 单双页 */
-    private display: DisplayType = DisplayType.SINGLE
-
     /** 好的 */
     private _pageIndex = 0;
 
@@ -70,13 +67,11 @@ export default class PageFlip {
     private onFlipComplete: (page: number, oldPage: number) => {};
 
     constructor(config: FlipConfig) {
-        //配置设置的属性
-        for (const key in config) {
-            if (config.hasOwnProperty(key)) {
-                const element = (<any>config)[key];
-                typeof element !== 'undefined' && ((<any>this)[key] = element);
-            }
-        }
+        this.book = config.book;
+        this.pages = Array.from(config.pages);
+        this.flipSpeed = config.flipSpeed || this.flipSpeed;
+        this.flipMoveSpeed = config.flipMoveSpeed  || this.flipSpeed;
+        this.onFlipComplete = config.onFlipComplete || this.onFlipComplete;
 
         this.init();
     }
@@ -283,7 +278,6 @@ export default class PageFlip {
      */
     private setMousePos(x: number, y: number) {
         // 设置鼠标的位置 下方中点坐标为(0，0)
-        // this._mouse.x = event.clientX - this._book.offsetLeft - (BOOK_WIDTH / 2);
         this.mousePos.x = x - this.book.offsetLeft;
         this.mousePos.y = -y + this.book.offsetTop + this.pageHeight;
     }
@@ -312,7 +306,7 @@ export default class PageFlip {
 
         // 根据页面翻页位置 通过改变宽度来改变内容显示 
         flip.page.style.transform = `translate3D(${foldX - this.pageWidth}px,0,0)`;
-        flip.paper.style.transform = `translate3D(${this.pageWidth - foldX}px,0,0)`;
+        flip.pageWrapper.style.transform = `translate3D(${this.pageWidth - foldX}px,0,0)`;
 
 
         this.canvasContext.save();
@@ -398,19 +392,19 @@ export default class PageFlip {
             return;
         }
 
-        (this.pages || []).forEach((pageEle, index) => {
-            let paperEle = <HTMLElement>pageEle.getElementsByClassName('almanacPaper')[0];
+        (this.flips || []).forEach((flip, index) => {
+            let pageEle = flip.page;
+            let pageWrapper = flip.pageWrapper;
 
             if (index < page - 1) {
-                // pageEle.style.width = 0;
                 pageEle.style.transform = `translate3D(${-this.pageWidth}px,0,0)`;
-                paperEle.style.transform = `translate3D(${this.pageWidth}px,0,0)`;
+                pageWrapper.style.transform = `translate3D(${this.pageWidth}px,0,0)`;
 
                 this.flips[index].target = -1;
                 this.flips[index].progress = -1;
             } else {
                 pageEle.style.transform = `translate3D(0,0,0)`;
-                paperEle.style.transform = `translate3D(0,0,0)`;
+                pageWrapper.style.transform = `translate3D(0,0,0)`;
             }
         })
 
@@ -446,17 +440,8 @@ export default class PageFlip {
     public resetPages(pages: HTMLElement[]) {
         this._pageIndex = 0;
         this.pages = Array.from(pages);
-        this.flips = [];
-        this.pages.forEach((page, index) => {
-            page.style.zIndex = (this.pages.length - index).toString();
-            this.flips.push({
-                progress: 1,
-                target: 1,
-                page: page,
-                paper: <HTMLElement>page.getElementsByClassName('almanacPaper')[0],
-                dragging: false
-            })
-        });
+        
+        this.initFlips();
     }
 
 
@@ -502,22 +487,19 @@ export default class PageFlip {
     }
 
     /**
-     * 初始化页面翻页对象
+     * 设置 filip 对象
      */
-    private initPages() {
+    initFlips(){
+        this.flips = [];
 
-        //页面尺寸
-        if (this.pages.length <= 0) {
-            return;
-        }
-
-        this.pageWidth = this.pages[0].offsetWidth;
-        this.pageHeight = this.pages[0].offsetHeight;
-
-        //设置 filip 对象
         this.pages.forEach((page, index) => {
+            let pageWrapper = document.createElement('div');
+            
+            pageWrapper.innerHTML = page.innerHTML;
+            page.innerHTML = '';
+            page.appendChild(pageWrapper);
             page.style.zIndex = (this.pages.length - index).toString();
-
+            
             this.flips.push({
                 //当前翻页的进度 -1 ～ 1 ; -1为最左，1为最右
                 progress: 1,
@@ -526,11 +508,27 @@ export default class PageFlip {
                 //页面的dom
                 page: page,
                 //页面的paper元素
-                paper: <HTMLElement>page.getElementsByClassName('almanacPaper')[0],
+                pageWrapper: pageWrapper,
                 //当页面被拖动时为true
                 dragging: false
             })
         });
+    }
+
+    /**
+     * 初始化页面翻页对象
+     */
+    private initPages() {
+
+        //页面尺寸
+        if (this.pages.length <= 0) {
+            throw ('please include at least one page')
+        }
+
+        this.pageWidth = this.pages[0].offsetWidth;
+        this.pageHeight = this.pages[0].offsetHeight;
+
+        this.initFlips();
     }
 
     /**

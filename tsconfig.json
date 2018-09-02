@@ -5,7 +5,11 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "target": "es6",
+        "lib": [
+            "dom",
+            "es7"
+        ],
+        "target": "es5",
     },
     "exclude": [
         "node_modules",

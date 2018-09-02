@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
 import './scss/index.scss';
-import PageFlip from '../src/pageFlip';
+import PageFlip from '../../src/pageFlip';
 import mockData from './script/mock_almanac';
 import renderAlmanac from './script/render_almanac'
 import { parseDate, formatDate } from './script/utils';
@@ -29,7 +29,7 @@ class App {
      */
     renderCurrentPage() {   
         let $almancWrap = this.ele.$almancWrap;
-        let currentDateEle = this.genElement(this.date, this.almanacCache.get(this.date));
+        let currentDateEle = this.genAlmanacElement(this.date, this.almanacCache.get(this.date));
         $almancWrap.html('');
         $almancWrap.append(currentDateEle);
     }
@@ -49,8 +49,8 @@ class App {
         let hasPrev = prevDayData && !prevDayData.error;
         let hasNext = nextDayData && !nextDayData.error;
 
-        hasPrev && $almancWrap.prepend(this.genElement(prevDate, prevDayData));
-        hasNext && $almancWrap.append(this.genElement(nextDate, nextDayData));
+        hasPrev && $almancWrap.prepend(this.genAlmanacElement(prevDate, prevDayData));
+        hasNext && $almancWrap.append(this.genAlmanacElement(nextDate, nextDayData));
 
         if (hasPrev && hasNext) {
             this.resetPages(2);
@@ -95,7 +95,7 @@ class App {
      * @param {data} date 日期
      * @param {almanac} almanac 黄历数据
      */
-    genElement(date: string, almanac: any) {
+    genAlmanacElement(date: string, almanac: any) {
         let element = document.createElement('div');
         $(element).addClass('almanac_item');
         element.innerHTML = renderAlmanac(parseDate(date), almanac);
@@ -255,6 +255,7 @@ class App {
      * @param {string} date 日期
      */
     fetchAlmanac(date: string) {
+        //假装从接口返回
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve(mockData)

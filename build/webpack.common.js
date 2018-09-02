@@ -5,7 +5,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
     entry: {
         pageFlip: './src/pageFlip.ts',
-        demo: './demo/index.ts'
+        demoRegular: './demo/demo_regular/index.ts',
+        demoSimple: './demo/demo_simple/index.ts'
     },
 
     output: {
@@ -29,9 +30,6 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 use: [
-                    {
-                        loader: 'babel-loader'
-                    },
                     {
                         loader: 'ts-loader'
                     }
@@ -67,10 +65,18 @@ module.exports = {
     },
 
     plugins: [
+        // demo regular
         new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: 'demo/index.html'
+            filename: 'demo_regular.html',
+            template: 'demo/demo_regular/index.html'
         }),
+
+        // demo simple
+        new HtmlWebpackPlugin({
+            filename: 'demo_simple.html',
+            template: 'demo/demo_simple/index.html'
+        }),
+
         new MiniCssExtractPlugin({
             filename: '[name].[hash].css',
             chunkFilename: '[id].[hash].css',

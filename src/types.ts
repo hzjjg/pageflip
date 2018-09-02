@@ -4,6 +4,12 @@ import { DisplayType } from "./enum";
  * 配置项
  */
 export interface FlipConfig {
+    /** 书本的dom */
+    book: HTMLElement;
+
+    /** 页面的dom */
+    pages: HTMLElement[];
+
     /** 翻页释放时的速度 0 - 1 */
     flipSpeed?: number;
 
@@ -13,14 +19,8 @@ export interface FlipConfig {
     /** 翻页力度，音响翻页的高度 */
     flipStrength?: number;
 
-    /** 书本的dom */
-    book?: HTMLElement;
-
-    /** 页面的dom */
-    pages?: HTMLElement[];
-
     /** 单双页 */
-    display?: DisplayType;
+    // display?: DisplayType;
 
     /** 翻页页面页码变化的回调 */
     onFlipComplete?: (page:number,oldPage:number) => any;
@@ -41,8 +41,8 @@ export interface Flip {
     /** 页面的dom */
     page: HTMLElement,
 
-    /** 页面的pager元素 */
-    paper: HTMLElement,
+    /** 页面的pageWrapper元素 */
+    pageWrapper: HTMLElement,
 
     /** 是否在拖动 */
     dragging: boolean
