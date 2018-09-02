@@ -27,6 +27,9 @@ export default class PageFlip {
     /** 翻页力度，音响翻页的高度 */
     private flipStrength: number = 10;
 
+    /** 翻页的背景色 */
+    private flipColor:string = '#fff';
+
     /** 画布的DOM */
     private canvas: HTMLCanvasElement;
 
@@ -71,6 +74,7 @@ export default class PageFlip {
         this.pages = Array.from(config.pages);
         this.flipSpeed = config.flipSpeed || this.flipSpeed;
         this.flipMoveSpeed = config.flipMoveSpeed  || this.flipSpeed;
+        this.flipColor = config.flipColor || this.flipColor;
         this.onFlipComplete = config.onFlipComplete || this.onFlipComplete;
 
         this.init();
@@ -444,7 +448,6 @@ export default class PageFlip {
         this.initFlips();
     }
 
-
     /**
      * 重设页面大小
      */
@@ -490,16 +493,34 @@ export default class PageFlip {
      * 设置 filip 对象
      */
     initFlips(){
-        this.flips = [];
+        // let pagesWrapper = document.createElement('div');
+        // pagesWrapper.innerHTML = this.book.innerHTML;
+        // this.book.innerHTML = '';
+        // this.book.appendChild(pagesWrapper);
 
+        // pagesWrapper.style.position = 'absolute';
+        // pagesWrapper.style.top = '0';
+        // pagesWrapper.style.right = '0';
+        // pagesWrapper.style.left = '0';
+        // pagesWrapper.style.bottom = '0';
+        // pagesWrapper.style.overflow = 'hidden';
+
+        this.flips = [];
         this.pages.forEach((page, index) => {
-            let pageWrapper = document.createElement('div');
+            let pageContentWrapper = document.createElement('div');
             
-            pageWrapper.innerHTML = page.innerHTML;
+            pageContentWrapper.innerHTML = page.innerHTML;
             page.innerHTML = '';
-            page.appendChild(pageWrapper);
-            page.style.zIndex = (this.pages.length - index).toString();
+            page.appendChild(pageContentWrapper);
             
+            page.style.zIndex = (this.pages.length - index).toString();
+
+            page.style.position = 'absolute';
+            page.style.left = '0';
+            page.style.right = '0';
+            page.style.top = '0';
+            page.style.bottom = '0';
+
             this.flips.push({
                 //当前翻页的进度 -1 ～ 1 ; -1为最左，1为最右
                 progress: 1,
@@ -508,7 +529,7 @@ export default class PageFlip {
                 //页面的dom
                 page: page,
                 //页面的paper元素
-                pageWrapper: pageWrapper,
+                pageWrapper: pageContentWrapper,
                 //当页面被拖动时为true
                 dragging: false
             })
@@ -525,10 +546,10 @@ export default class PageFlip {
             throw ('please include at least one page')
         }
 
+        this.book.style.position = 'relative';
+        this.initFlips();
         this.pageWidth = this.pages[0].offsetWidth;
         this.pageHeight = this.pages[0].offsetHeight;
-
-        this.initFlips();
     }
 
     /**

@@ -68,13 +68,15 @@ module.exports = {
         // demo regular
         new HtmlWebpackPlugin({
             filename: 'demo_regular.html',
-            template: 'demo/demo_regular/index.html'
+            template: 'demo/demo_regular/index.html',
+            chunks: ['demoRegular']
         }),
 
         // demo simple
         new HtmlWebpackPlugin({
             filename: 'demo_simple.html',
-            template: 'demo/demo_simple/index.html'
+            template: 'demo/demo_simple/index.html',
+            chunks: ['demoSimple']
         }),
 
         new MiniCssExtractPlugin({

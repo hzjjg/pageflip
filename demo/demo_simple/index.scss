@@ -1,0 +1,30 @@
+html{
+    background-color: rgb(245, 224, 178);
+}
+
+.book{
+    margin: 50px auto;
+    width: 1000px;
+    height: 1600px;
+}
+
+.pages{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    list-style: none;
+    overflow: hidden;
+}
+
+.page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    font-size: 500px;
+    border-radius: 0.29867rem;
+    overflow: hidden;
+    will-change: transform;
+}

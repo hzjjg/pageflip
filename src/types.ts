@@ -19,6 +19,9 @@ export interface FlipConfig {
     /** 翻页力度，音响翻页的高度 */
     flipStrength?: number;
 
+    /** 翻页的背景色 */
+    flipColor?:string;
+
     /** 单双页 */
     // display?: DisplayType;
 

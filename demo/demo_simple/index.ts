@@ -4,12 +4,10 @@ import './index.scss';
 
 class App{
     init(){
-        console.log('haha');
-        
-        // new PageFlip({
-        //     book:$('.book')[0],
-        //     pages:Array.from($('.page'))
-        // })
+        new PageFlip({
+            book:$('.book')[0],
+            pages:Array.from($('.page')),
+        })
     }
 }
 
